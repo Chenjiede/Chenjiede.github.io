@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>搭建个人免费博客 | 爬向天花板的蚂蚁</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="上善若水，水善则利万物">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="搭建个人免费博客 | 爬向天花板的蚂蚁">
+    <meta name="twitter:description" content="上善若水，水善则利万物">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="搭建个人免费博客 | 爬向天花板的蚂蚁">
+    <meta property="og:description" content="上善若水，水善则利万物">
+
+    
+    <meta name="author" content="JADE">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+
+    <link rel="canonical" href="http://yoursite.com/2017/03/21/搭建个人免费博客（小白篇）/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 爬向天花板的蚂蚁 的主页"><img src="/images/avatar.jpg" width="80" alt="爬向天花板的蚂蚁 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 爬向天花板的蚂蚁">爬向天花板的蚂蚁</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">iOS开发者</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">人可以一无所有，但绝不能让人看不到任何希望</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="http://weibo.com/u/2809933401" title="我的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/Chenjiede" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-purple"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-03-21T15:00:10.000Z" class="post-list__meta--date date">2017-03-21</time> &#8226; <span class="post-meta__tags tags">于&nbsp; </span>
+      <span class="page-pv">
+      &nbsp;阅读&nbsp;<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">搭建个人免费博客</h1>
+  </header>
+
+  <section class="post">
+    <h1 id="基于Node-js-Hexo-Github-Pages搭建"><a href="#基于Node-js-Hexo-Github-Pages搭建" class="headerlink" title="基于Node.js + Hexo + Github Pages搭建"></a>基于Node.js + Hexo + Github Pages搭建</h1><h2 id="针对Mac系统，Window的安装差别在指令"><a href="#针对Mac系统，Window的安装差别在指令" class="headerlink" title="针对Mac系统，Window的安装差别在指令"></a>针对Mac系统，Window的安装差别在指令</h2><p>本人也是一个小白，所以这也是一篇小白也能看懂的文章。我在搭建自己的博客也踩了不少的坑，希望这篇文章能让想搭建博客的小白少踩坑</p>
+<p>先来一个<a href="https://onevcat.com" target="_blank" rel="external">喵神</a>的博客的看下效果<br><img src="http://ww1.sinaimg.cn/large/a77c2e59gy1fdtocytdwsj21dg0pqkfh.jpg" alt=""></p>
+<p><strong>1.Github域名</strong></p>
+<p>先注册<a href="https://github.com/" target="_blank" rel="external">Github</a>账号，正常人都可以注册成功的，这里略过</p>
+<p>创建仓库(repository) 来存储我们的网站，点击首页的 <strong>New repository</strong></p>
+<p><img src="http://ww1.sinaimg.cn/large/a77c2e59gy1fdtoohvop2j20ju059wel.jpg" alt=""></p>
+<p>给仓库起名，仓库的前缀是用户名，我已经创建过同名的仓库了，所以显示重名了</p>
+<p><img src="http://ww1.sinaimg.cn/large/a77c2e59gy1fdtoule195j20kv0ib0u1.jpg" alt=""></p>
+<p><strong>2.安装环境软件</strong></p>
+<p>2.1 安装Git</p>
+<p>Mac系统安装Git很简单，就两行行指令</p>
+<pre><code>// 如果已安装HomeBrew 无需执行此行
+$ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
+ $ brew install git   // 安装Git
+</code></pre><p>Window系统请自行百度，也很简单的，不停点下一步就好</p>
+<p>2.2 安装Node.js</p>
+<p>要安装Node要先安装nvm，nvm是Node的版本管理工具</p>
+<pre><code>$ curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+</code></pre><p>安装完成后，一定要 <strong>重启终端</strong><br>然后安装Node.js</p>
+<pre><code>$ nvm install 4
+</code></pre><p><strong>注意</strong> 这里安装可能会出现坑，我就是在这里踩的坑，然后我付出了沉重的代价</p>
+<p>安装nvm后，命令窗输出 <strong>Warning: nvm-0.31.0 already installed</strong><br>或nvm install 4 指令出现 <strong>command not found</strong></p>
+<p>出现这种问题，我是直接下载Node.js来安装，<a href="https://nodej" target="_blank" rel="external">下载地址</a></p>
+<p>2.3 安装Hexo</p>
+<p>要前面的git，node都安装了，再安装Hexo</p>
+<pre><code>$ sudo npm install hexo-cli -g
+</code></pre><p><strong>3.博客</strong></p>
+<ol>
+<li>初始化博客文件区</li>
+</ol>
+<p>   选择一个自己的工作文件下，执行下面的指令，username根据自己的喜欢来命名</p>
+<pre><code>$ hexo init username.github.io
+</code></pre><ol>
+<li><p>配置博客主题</p>
+<p>毕竟这是一个看脸的年代，执行下面的指令，进入刚才生成的博客文件区</p>
+<p> $ cd username.github.io</p>
+<p>安装主题，这里选择的主题是喵神的主题，个人比较喜欢，<a href="https://hexo.io/themes/" target="_blank" rel="external">更多主题请点击</a></p>
+<p> $ git clone <a href="https://github.com/monniya/hexo-theme-new-vno.git" target="_blank" rel="external">https://github.com/monniya/hexo-theme-new-vno.git</a> themes/new-vno</p>
+<p>配置主题到博客配置文件，打开当前文件夹下<strong>_config.yml</strong>修改几个键值对，下面把几个必须设置的列出来按需求修改，记得保存，还有注意配置的键值之间一定要有<strong>空格</strong></p>
+<p> title:     //你博客的名字<br>  author:   //你的名字<br>  language: zh-Hans    //语言 中文<br>  theme: new-vno   //刚刚安装的主题名称</p>
+<p>github发布的配置，username换成你的github的用户名</p>
+</li>
+</ol>
+<pre><code>deploy:
+  type: git    //使用Git 发布
+  repo: https://github.com/username/username.github.io.git    // 刚创建的Github仓库
+</code></pre><p> 针对刚才安装的主题的配置在<a href="https://github.com/monniya/hexo-theme-new-vno" target="_blank" rel="external">请点击这里</a>有更多的说明</p>
+<p><strong>4.测试</strong></p>
+<p>到这里，所有的基础框架已经创建完成，执行下面的指令进行</p>
+<pre><code>$ hexo s
+</code></pre><p>终端输出服务器启动完成，终端一直运行，在浏览器中输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 访问了</p>
+<p><strong>5.写文章并发布</strong></p>
+<p>1.写文章</p>
+<p>可以博客文章了，先写一个来测试下，在username.github.io/source/_posts文件夹下创建FirstTest.md的文件，md是<strong>markdown</strong>语法编写的文件。<br>如下面的例子</p>
+<pre><code>---
+ title: FirstTest
+ ---
+&gt; 第一次写博客文章，用于测试
+</code></pre><p><strong>写完一定要保存</strong></p>
+<p>可以先在本地看下效果，把终端正在运行的服务器关闭(<strong>ctrl + c</strong>), 然后重新启动服务器，执行指令 <strong>hexo s</strong></p>
+<p>2.安装<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external">hexo-deployer-git</a>自动部署发布工具</p>
+<p>这个工具会自动把博客文章生成的静态网页上传到github，回到username.github.io/文件下，执行下面的指令安装</p>
+<pre><code>$ npm install hexo-deployer-git --save
+</code></pre><p>3.发布文章</p>
+<p>生成静态网页文件发布至我们的Github pages中，执行下面的指令</p>
+<pre><code>$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo d
+</code></pre><p>如果这是你的第一次，终端会让你输入Github 的邮箱和密码，正确输入后，就会把你的博客上传至Github。以后在每次把博客写完后，执行一下这个命令 <strong>hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</strong> 就可以直接发布了</p>
+<p><strong>激动时刻</strong></p>
+<p>在浏览器中输入 <strong><a href="https://username.github.io" target="_blank" rel="external">https://username.github.io</a></strong> 就可以访问你的博客了，username是你自己起的用户名</p>
+<p><strong>迷之总结</strong></p>
+<p>博客的搭建要有耐心，我都捣腾了很久先弄好的，希望这篇文章可以帮助想搭建博客的同学</p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/03/18/SecondNight/" title="Second Night">Second Night</a></h2>
+                <p class="excerpt">
+                
+                
+我有一头小毛驴，可是我从来都不骑。
+
+
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-03-18T14:16:51.000Z" class="post-list__meta--date date">2017-03-18</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/03/18/SecondNight/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2017 - 本站使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题,
+        由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+    </span>
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>
