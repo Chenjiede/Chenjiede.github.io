@@ -57,7 +57,7 @@
         <a href="/" title="前往 爬向天花板的蚂蚁 的主页"><img src="/images/avatar.jpg" width="80" alt="爬向天花板的蚂蚁 logo" class="panel-cover__logo logo" /></a>
         <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 爬向天花板的蚂蚁">爬向天花板的蚂蚁</a></h1>
         
-        <span class="panel-cover__subtitle panel-subtitle">iOS开发者</span>
+        <span class="panel-cover__subtitle panel-subtitle">上善若水，水善则利万物</span>
         
         <hr class="panel-cover__divider" />
         <p class="panel-cover__description">人可以一无所有，但绝不能让人看不到任何希望</p>
@@ -144,7 +144,8 @@
 
   <section class="post">
     <h1 id="基于Node-js-Hexo-Github-Pages搭建"><a href="#基于Node-js-Hexo-Github-Pages搭建" class="headerlink" title="基于Node.js + Hexo + Github Pages搭建"></a>基于Node.js + Hexo + Github Pages搭建</h1><h2 id="针对Mac系统，Window的安装差别在指令"><a href="#针对Mac系统，Window的安装差别在指令" class="headerlink" title="针对Mac系统，Window的安装差别在指令"></a>针对Mac系统，Window的安装差别在指令</h2><p>本人也是一个小白，所以这也是一篇小白也能看懂的文章。我在搭建自己的博客也踩了不少的坑，希望这篇文章能让想搭建博客的小白少踩坑</p>
-<p>先来一个<a href="https://onevcat.com" target="_blank" rel="external">喵神</a>的博客的看下效果<br><img src="http://ww1.sinaimg.cn/large/a77c2e59gy1fdtocytdwsj21dg0pqkfh.jpg" alt=""></p>
+<p>先来一个<a href="https://onevcat.com" target="_blank" rel="external">喵神</a>的博客的看下效果</p>
+<p><img src="http://ww1.sinaimg.cn/large/a77c2e59gy1fdtocytdwsj21dg0pqkfh.jpg" alt=""></p>
 <p><strong>1.Github域名</strong></p>
 <p>先注册<a href="https://github.com/" target="_blank" rel="external">Github</a>账号，正常人都可以注册成功的，这里略过</p>
 <p>创建仓库(repository) 来存储我们的网站，点击首页的 <strong>New repository</strong></p>
@@ -153,7 +154,7 @@
 <p><img src="http://ww1.sinaimg.cn/large/a77c2e59gy1fdtoule195j20kv0ib0u1.jpg" alt=""></p>
 <p><strong>2.安装环境软件</strong></p>
 <p>2.1 安装Git</p>
-<p>Mac系统安装Git很简单，就两行行指令</p>
+<p>Mac系统安装Git很简单，就两行指令</p>
 <pre><code>// 如果已安装HomeBrew 无需执行此行
 $ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;
  $ brew install git   // 安装Git
@@ -178,18 +179,21 @@ $ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew
 </code></pre><ol>
 <li><p>配置博客主题</p>
 <p>毕竟这是一个看脸的年代，执行下面的指令，进入刚才生成的博客文件区</p>
-<p> $ cd username.github.io</p>
-<p>安装主题，这里选择的主题是喵神的主题，个人比较喜欢，<a href="https://hexo.io/themes/" target="_blank" rel="external">更多主题请点击</a></p>
-<p> $ git clone <a href="https://github.com/monniya/hexo-theme-new-vno.git" target="_blank" rel="external">https://github.com/monniya/hexo-theme-new-vno.git</a> themes/new-vno</p>
-<p>配置主题到博客配置文件，打开当前文件夹下<strong>_config.yml</strong>修改几个键值对，下面把几个必须设置的列出来按需求修改，记得保存，还有注意配置的键值之间一定要有<strong>空格</strong></p>
-<p> title:     //你博客的名字<br>  author:   //你的名字<br>  language: zh-Hans    //语言 中文<br>  theme: new-vno   //刚刚安装的主题名称</p>
-<p>github发布的配置，username换成你的github的用户名</p>
+<pre><code>$ cd username.github.io
+</code></pre><p>安装主题，这里选择的主题是喵神的主题，个人比较喜欢，<a href="https://hexo.io/themes/" target="_blank" rel="external">更多主题请点击</a></p>
+<pre><code>$ git clone https://github.com/monniya/hexo-theme-new-vno.git themes/new-vno
+</code></pre><p>配置主题到博客配置文件，打开当前文件夹下<strong>_config.yml</strong>修改几个键值对，下面把几个必须设置的列出来按需求修改，记得保存，还有注意配置的键值之间一定要有<strong>空格</strong></p>
+<pre><code>title:     //你博客的名字
+ author:   //你的名字
+ language: zh-Hans    //语言 中文
+ theme: new-vno   //刚刚安装的主题名称
+</code></pre><p>github发布的配置，username换成你的github的用户名</p>
+<pre><code>deploy:
+   type: git    //使用Git 发布
+   repo: https://github.com/username/username.github.io.git    // 刚创建的Github仓库
+</code></pre><p>针对刚才安装的主题的配置在<a href="https://github.com/monniya/hexo-theme-new-vno" target="_blank" rel="external">请点击这里</a>有更多的说明</p>
 </li>
 </ol>
-<pre><code>deploy:
-  type: git    //使用Git 发布
-  repo: https://github.com/username/username.github.io.git    // 刚创建的Github仓库
-</code></pre><p> 针对刚才安装的主题的配置在<a href="https://github.com/monniya/hexo-theme-new-vno" target="_blank" rel="external">请点击这里</a>有更多的说明</p>
 <p><strong>4.测试</strong></p>
 <p>到这里，所有的基础框架已经创建完成，执行下面的指令进行</p>
 <pre><code>$ hexo s
@@ -200,7 +204,7 @@ $ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew
 <pre><code>---
  title: FirstTest
  ---
-&gt; 第一次写博客文章，用于测试
+第一次写博客文章，用于测试
 </code></pre><p><strong>写完一定要保存</strong></p>
 <p>可以先在本地看下效果，把终端正在运行的服务器关闭(<strong>ctrl + c</strong>), 然后重新启动服务器，执行指令 <strong>hexo s</strong></p>
 <p>2.安装<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external">hexo-deployer-git</a>自动部署发布工具</p>
@@ -220,28 +224,7 @@ $ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew
 </article>
 
 <section class="read-more">
-           
-    
-        
-        
-               
-            <div class="read-more-item">
-                <span class="read-more-item-dim">更早的文章</span>
-                <h2 class="post-list__post-title post-title"><a href="/2017/03/18/SecondNight/" title="Second Night">Second Night</a></h2>
-                <p class="excerpt">
-                
-                
-我有一头小毛驴，可是我从来都不骑。
-
-
-                &hellip;
-                </p>
-                <div class="post-list__meta"><time datetime="2017-03-18T14:16:51.000Z" class="post-list__meta--date date">2017-03-18</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/03/18/SecondNight/">继续阅读</a></div>
-                       
-            </div>
-        
      
-   
    
   
 </section>
