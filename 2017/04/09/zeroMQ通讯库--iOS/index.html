@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>zeroMQ通讯库--iOS | 爬向天花板的蚂蚁</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="上善若水，水善则利万物">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="zeroMQ通讯库--iOS | 爬向天花板的蚂蚁">
+    <meta name="twitter:description" content="上善若水，水善则利万物">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="zeroMQ通讯库--iOS | 爬向天花板的蚂蚁">
+    <meta property="og:description" content="上善若水，水善则利万物">
+
+    
+    <meta name="author" content="JADE">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+
+    <link rel="canonical" href="http://yoursite.com/2017/04/09/zeroMQ通讯库--iOS/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 爬向天花板的蚂蚁 的主页"><img src="/images/avatar.jpg" width="80" alt="爬向天花板的蚂蚁 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 爬向天花板的蚂蚁">爬向天花板的蚂蚁</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">上善若水，水善则利万物</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">人可以一无所有，但绝不能让人看不到任何希望</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="http://weibo.com/u/2809933401" title="我的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/Chenjiede" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-purple"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-04-08T16:24:02.000Z" class="post-list__meta--date date">2017-04-09</time> &#8226; <span class="post-meta__tags tags">于&nbsp; </span>
+      <span class="page-pv">
+      &nbsp;阅读&nbsp;<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">zeroMQ通讯库--iOS</h1>
+  </header>
+
+  <section class="post">
+    <p>zeroMQ是号称史上最好的通讯库，基于C语言开发的，实时流处理sorm的task之间的通信就是用的zeroMQ。zeroMQ在使用模式上支持多种，有req-reply，publish-subscribe，pipe。我在项目中使用的是req-replay, publish-subscribe两种方式，pipe方式暂时还没用过，或许后期研究下。zmq框架封装好了底层实现，只抛给我们一个socket使用，所以我对socket进行了二次封装，以满足我们的业务需求。</p>
+<p>先上一个小菜，我个人对req-reply模式的使用和理解。req-replay是请求响应机制，类是http的响应请求，每请求一次服务器就获取一次数据，这种是应答请求模式。</p>
+<p>下面是zmq的应答请求创建</p>
+<pre><code>ZMQContext *context = [[ZMQContext alloc] initWithIOThreads:1];
+ZMQSocket *socket = [ctx socketWithType:ZMQ_REP]; // ZMQ_REP是请求响应模式 
+NSString *endpoint = @&quot;tcp://localhost:5555&quot;; // 需要绑定的IP地址
+BOOL bind = [socket connectToEndpoint:endpoint];
+if (!bind) {
+    NSLog(@&quot;*** Failed to bind to endpoint [%@].&quot;, endpoint);
+}
+
+if (![socket sendData:json withFlags:1]) {
+    NSLog(@&quot;发送失败&quot;);
+} else {
+    NSData *reply = [socket receiveDataWithFlags:0]; // 阻塞当前线程，直到有数据返回
+}
+</code></pre><p>请求完成销毁socket和上下文</p>
+<pre><code>[context terminate];
+</code></pre><p>这是zmq示例的用法，这个用法是不能满足在实际项目的使用。这里发送数据使用的是非阻塞式，接收数据是使用阻塞式，当然你也可以使用非阻塞式的，就是withflags:这个来选择的，使用非阻塞式就要轮询socket，获取服务器的返回的数据。我用的是阻塞式，这个方式比较符合我们的业务需求。</p>
+<p>使用阻塞式首先要解决一个超时的问题，zmq提供给我们两个oc的操作文件<strong>ZMQContext</strong>和<strong>ZMQSocket</strong>，里面是没有提供超时设置的接口。zmq在iOS端应用比较少，网上可以查阅的资料也很少，最后看了PHP的示例代码，发现可以在socket层设置，然后我就在socket层设置了，并封装到ZMQSocket，对外提供了接口<strong>loadingtime</strong>。</p>
+<p>阻塞式是肯定不能使用在主线程的，我们要另开一个线程来处理这种应答请求，为了考虑性能，我们就要面对两个问题了。第一个是socket的重用，不能每次请求都创建socket，请求完成就销毁socket，第二个是线程的重用。</p>
+<p>zmq的应答请求，原则上一请求，一响应。可是真实的情况是有时候网络不好，请求的响应速度变慢了，然后你重用socket进行请求并发，socket就会出现发送失败，还有超时的socket重用也是发送失败的。超时的socket要销毁，重新开启socket来处理请求。</p>
+<p>线程的重用是使用RunLoop来实现的，每个子线程都有RunLoop，只是默认不激活，我们要激活RunLoop，让线程在发送请求时工作，没有请求时进入休眠状态。</p>
+<p>直接上代码，多说无益了^-^</p>
+<pre><code>// 创建子线程
+- (NSThread *)thread {
+if (_thread == nil) {
+    _thread = [[NSThread alloc] initWithTarget:self selector:@selector(backgroundThread) object:nil];
+    _thread.name = @&quot;zmqREQ&quot;;
+    [_thread start];
+}
+    return _thread;
+}
+
+// 启动子线程，并激活RunLoop
+- (void)backgroundThread {
+@autoreleasepool {
+    NSThread *currentThread = [NSThread currentThread];
+    BOOL isCancelled = [currentThread isCancelled];
+    NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];
+
+    // 开启runloop
+    [currentRunLoop addPort:[NSMachPort port] forMode:NSDefaultRunLoopMode];
+
+        while (!isCancelled &amp;&amp; [currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
+            isCancelled = [currentThread isCancelled];
+           }
+    } 
+}
+
+// 空任务，唤醒线程
+- (void)closeThread {}
+
+// 提供外部的接口，把参数传进来，使用block回调
+- (void)startRequest:(NSDictionary *)params success:(void (^)(id))success failure:(void (^)(NSError *))failure {
+    // 先保存block
+    NSString *key = [params description];
+    if (success != nil) {
+        [self.successDict setObject:success forKey:key];
+    }
+    if (failure != nil) {
+        [self.failureDict setObject:failure forKey:key];
+    }
+    // 异步请求
+    [self performSelector:@selector(requestInThread:) onThread:self.thread withObject:params waitUntilDone:NO];
+}
+
+// 让子线程执行发送的请求
+- (void)requestInThread:(NSDictionary *)params {
+    NSThread *currentThread = [NSThread currentThread];
+    // 判断线程是否已经取消
+    if (currentThread.isCancelled) { return; }
+
+    // 获取缓存数组中的socket
+    ZMQSocket *socket = self.sockets.lastObject;
+    [self.sockets removeLastObject];
+
+    // 获取block
+    NSString *key = [params description];
+    successType success = self.successDict[key];
+    [self.successDict removeObjectForKey:key];
+    failureType failure = self.failureDict[key];
+    [self.failureDict removeObjectForKey:key];
+
+    if (socket == nil) {
+           socket = [self.context socketWithType:ZMQ_REQ];
+           socket.loadingtime = 5000;
+           NSString *endpoint = @&quot;tcp://:41204&quot;; // 服务器IP地址 
+           if (![socket connectToEndpoint:endpoint]) {
+            NSLog(@&quot;监听失败&quot;);
+            [socket close];
+            socket = nil;
+        }
+        NSLog(@&quot;创建socket&quot;);
+    }
+
+    NSData *json = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
+    if (![socket sendData:json withFlags:1]) {
+           NSLog(@&quot;发送失败&quot;);
+           dispatch_async(dispatch_get_main_queue(), ^{
+            if (failure) {
+                failure(nil);
+            }
+        });
+    }else{
+           if (socket == nil) return ;
+           NSData *reply = [socket receiveDataWithFlags:0]; // 阻塞当前线程，直到有数据返回
+        // 判断线程是否已经取消
+        if (currentThread.isCancelled) { return; }
+        id data = nil;
+        if (reply) {
+               data = [NSJSONSerialization JSONObjectWithData:reply options:0 error:nil];
+            [self.sockets addObject:socket];
+        } else {
+            [socket close];
+            socket = nil;
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) {
+                success(data);
+            }
+        });
+    }  
+}
+</code></pre><p>要激活RunLoop必须要有事件源和时钟，我这里用的是事件源，设置端口，让子线程接收其他线程的事件信号。这里要注意，使用 <strong>[currentRunLoop run]</strong> 方法，RunLoop就停不下来了，使用<strong>runMode:beforeDate:</strong>可以控制RunLoop的生命周期。子线程的代码运行到<strong>while (!isCancelled &amp;&amp; [currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]])</strong>就会进入循环并休眠，当子线程接收到任务信号时就会被唤醒并执行任务，执行完任务就执行<strong>while (!isCancelled &amp;&amp; [currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]])</strong>这行代码，并判断是否达到运行的期限，如果没有则继续休眠，反之就退出RunLoop结束子线程。这里是用了线程的取消标记来控制，如果线程已经取消了，就让RunLoop不执行<strong>[currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]</strong>，让RunLoop退出循环，不设置时间期限了。因而，我创建一个空任务，当要关闭子线程时，给子线程一个空任务达到唤醒子线程的目的，然后子线程进入判断，并退出RunLoop。</p>
+<p>我这里使用NSMutableArray来存储socket和NSMutableDictionary存储回调的block，这两个是线程不安全的。sockets只在子线程操作，这不会产生数据争夺。回调block是在两个线程操作，但是利用dictionary的特性，我这样操作是没有影响的，我做过大量的测试，如果你们在使用中出现线程问题，可以加锁。</p>
+<p>这篇博客是讲述zmq的应答模式，我封装的代码和改过的zeroMQ文件都放在 <a href="https://github.com/Chenjiede/zeromq-ios" target="_blank" rel="external">github</a> 。</p>
+<p>下一篇写对zmq订阅模式的使用和理解，欢迎关注。</p>
+<p><strong>参考</strong></p>
+<p>zeroMQ使用指导    <a href="http://zguide.zeromq.org/page:all" target="_blank" rel="external">http://zguide.zeromq.org/page:all</a></p>
+<p>zeroMQ的示例程序    <a href="https://github.com/imatix/zguide.git" target="_blank" rel="external">https://github.com/imatix/zguide.git</a></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/03/28/过去一年的随笔/" title="过去一年的随笔">过去一年的随笔</a></h2>
+                <p class="excerpt">
+                
+                上一年就想写博客了，记录下自己走过的路，虽然走了比较多的弯路，直到现在才开始写，也是严重的拖延症。
+作为一个进入职场不久的弱鸡，以我自身的经历来给大家作参考，希望对一些像我这样的大兄弟或大妹子有帮助。在这里，给各位正在找工作的同学一些个人建议。面试时可以将自身能力强行装到1.5倍，然后在试用期将自身
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-03-28T14:43:39.000Z" class="post-list__meta--date date">2017-03-28</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/03/28/过去一年的随笔/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2017 - 本站使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题,
+        由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+    </span>
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>
