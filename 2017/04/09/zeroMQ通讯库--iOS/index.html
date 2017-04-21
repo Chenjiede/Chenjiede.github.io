@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-    <title>zeroMQ通讯库--iOS | 爬向天花板的蚂蚁</title>
+    <title>ZeroMQ通讯库--iOS | 爬向天花板的蚂蚁</title>
     <meta name="renderer" content="webkit">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -15,11 +15,11 @@
     <meta name="description" content="上善若水，水善则利万物">
 
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="zeroMQ通讯库--iOS | 爬向天花板的蚂蚁">
+    <meta name="twitter:title" content="ZeroMQ通讯库--iOS | 爬向天花板的蚂蚁">
     <meta name="twitter:description" content="上善若水，水善则利万物">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="zeroMQ通讯库--iOS | 爬向天花板的蚂蚁">
+    <meta property="og:title" content="ZeroMQ通讯库--iOS | 爬向天花板的蚂蚁">
     <meta property="og:description" content="上善若水，水善则利万物">
 
     
@@ -35,7 +35,7 @@
     <meta name="generator" content="hexo"/>
     
 
-    <link rel="canonical" href="http://yoursite.com/2017/04/09/zeroMQ通讯库--iOS/"/>
+    <link rel="canonical" href="http://yoursite.com/2017/04/09/ZeroMQ通讯库--iOS/"/>
 
                  
 </head>
@@ -139,11 +139,11 @@
       </span> 
    
     </div>
-    <h1 class="post-title">zeroMQ通讯库--iOS</h1>
+    <h1 class="post-title">ZeroMQ通讯库--iOS</h1>
   </header>
 
   <section class="post">
-    <p>zeroMQ是号称史上最好的通讯库，基于C语言开发的，实时流处理sorm的task之间的通信就是用的zeroMQ。zeroMQ在使用模式上支持多种，有req-reply，publish-subscribe，pipe。我在项目中使用的是req-replay, publish-subscribe两种方式，pipe方式暂时还没用过，或许后期研究下。zmq框架封装好了底层实现，只抛给我们一个socket使用，所以我对socket进行了二次封装，以满足我们的业务需求。</p>
+    <p>ZeroMQ是号称史上最好的通讯库，基于C语言开发的，实时流处理sorm的task之间的通信就是用的ZeroMQ。zeroMQ在使用模式上支持多种，有req-reply，publish-subscribe，pipe。我在项目中使用的是req-replay, publish-subscribe两种方式，pipe方式暂时还没用过，或许后期研究下。zmq框架封装好了底层实现，只抛给我们一个socket使用，所以我对socket进行了二次封装，以满足我们的业务需求。</p>
 <p>先上一个小菜，我个人对req-reply模式的使用和理解。req-replay是请求响应机制，类是http的响应请求，每请求一次服务器就获取一次数据，这种是应答请求模式。</p>
 <p>下面是zmq的应答请求创建</p>
 <pre><code>ZMQContext *context = [[ZMQContext alloc] initWithIOThreads:1];
@@ -270,7 +270,6 @@ if (_thread == nil) {
 </code></pre><p>要激活RunLoop必须要有事件源和时钟，我这里用的是事件源，设置端口，让子线程接收其他线程的事件信号。这里要注意，使用 <strong>[currentRunLoop run]</strong> 方法，RunLoop就停不下来了，使用<strong>runMode:beforeDate:</strong>可以控制RunLoop的生命周期。子线程的代码运行到<strong>while (!isCancelled &amp;&amp; [currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]])</strong>就会进入循环并休眠，当子线程接收到任务信号时就会被唤醒并执行任务，执行完任务就执行<strong>while (!isCancelled &amp;&amp; [currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]])</strong>这行代码，并判断是否达到运行的期限，如果没有则继续休眠，反之就退出RunLoop结束子线程。这里是用了线程的取消标记来控制，如果线程已经取消了，就让RunLoop不执行<strong>[currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]</strong>，让RunLoop退出循环，不设置时间期限了。因而，我创建一个空任务，当要关闭子线程时，给子线程一个空任务达到唤醒子线程的目的，然后子线程进入判断，并退出RunLoop。</p>
 <p>我这里使用NSMutableArray来存储socket和NSMutableDictionary存储回调的block，这两个是线程不安全的。sockets只在子线程操作，这不会产生数据争夺。回调block是在两个线程操作，但是利用dictionary的特性，我这样操作是没有影响的，我做过大量的测试，如果你们在使用中出现线程问题，可以加锁。</p>
 <p>这篇博客是讲述zmq的应答模式，我封装的代码和改过的zeroMQ文件都放在 <a href="https://github.com/Chenjiede/zeromq-ios" target="_blank" rel="external">github</a> 。</p>
-<p>下一篇写对zmq订阅模式的使用和理解，欢迎关注。</p>
 <p><strong>参考</strong></p>
 <p>zeroMQ使用指导    <a href="http://zguide.zeromq.org/page:all" target="_blank" rel="external">http://zguide.zeromq.org/page:all</a></p>
 <p>zeroMQ的示例程序    <a href="https://github.com/imatix/zguide.git" target="_blank" rel="external">https://github.com/imatix/zguide.git</a></p>
@@ -282,6 +281,20 @@ if (_thread == nil) {
 <section class="read-more">
            
     
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/04/15/ZeroMQ通讯订阅模式--iOS/" title="ZeroMQ通讯订阅模式--iOS">ZeroMQ通讯订阅模式--iOS</a></h2>
+                <p class="excerpt">
+                
+                ZeroMQ在使用模式上支持多种，有req-reply，publish-subscribe。订阅模式是zmq的重头戏，以鄙人的使用和理解来浅谈下订阅模式，本人也是边学边用，如果有问题请大神指出。关于应答模式请点击这个 链接 。
+zmq的订阅模式实现示例代码如下
+ZMQContext *ctx = [
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-04-15T07:43:36.000Z" class="post-list__meta--date date">2017-04-15</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/04/15/ZeroMQ通讯订阅模式--iOS/">继续阅读</a></div>
+                           
+            </div>
         
         
                

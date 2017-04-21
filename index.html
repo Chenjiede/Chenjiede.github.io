@@ -135,13 +135,28 @@
   
     
     <li>
-      <h2 class="post-list__post-title post-title"><a href="/2017/04/09/zeroMQ通讯库--iOS/" title="link to post.title">zeroMQ通讯库--iOS</a></h2>
+      <h2 class="post-list__post-title post-title"><a href="/2017/04/15/ZeroMQ通讯订阅模式--iOS/" title="link to post.title">ZeroMQ通讯订阅模式--iOS</a></h2>
       <p class="excerpt">
     
-      zeroMQ是号称史上最好的通讯库，基于C语言开发的，实时流处理sorm的task之间的通信就是用的zeroMQ。zeroMQ在使用模式上支持多种，有req-reply，publish-subscribe，pipe。我在项目中使用的是req-replay, publish-subscribe两种方式，pipe方式暂时还没用过，或许后期研究下。zmq框架封装好了底层实现，只抛给我们一个socket使
+      ZeroMQ在使用模式上支持多种，有req-reply，publish-subscribe。订阅模式是zmq的重头戏，以鄙人的使用和理解来浅谈下订阅模式，本人也是边学边用，如果有问题请大神指出。关于应答模式请点击这个 链接 。
+zmq的订阅模式实现示例代码如下
+ZMQContext *ctx = [[ZMQContext alloc] initWithIOThreads:1U];
+// Socke
     &hellip;
       </p>
-      <div class="post-list__meta"><time datetime="2017-04-08T16:24:02.000Z" class="post-list__meta--date date">2017-04-09</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/04/09/zeroMQ通讯库--iOS/">继续阅读</a></div>
+      <div class="post-list__meta"><time datetime="2017-04-15T07:43:36.000Z" class="post-list__meta--date date">2017-04-15</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/04/15/ZeroMQ通讯订阅模式--iOS/">继续阅读</a></div>
+      <hr class="post-list__divider" />
+    </li>
+  
+    
+    <li>
+      <h2 class="post-list__post-title post-title"><a href="/2017/04/09/ZeroMQ通讯库--iOS/" title="link to post.title">ZeroMQ通讯库--iOS</a></h2>
+      <p class="excerpt">
+    
+      ZeroMQ是号称史上最好的通讯库，基于C语言开发的，实时流处理sorm的task之间的通信就是用的ZeroMQ。zeroMQ在使用模式上支持多种，有req-reply，publish-subscribe，pipe。我在项目中使用的是req-replay, publish-subscribe两种方式，pipe方式暂时还没用过，或许后期研究下。zmq框架封装好了底层实现，只抛给我们一个socket使
+    &hellip;
+      </p>
+      <div class="post-list__meta"><time datetime="2017-04-08T16:24:02.000Z" class="post-list__meta--date date">2017-04-09</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/04/09/ZeroMQ通讯库--iOS/">继续阅读</a></div>
       <hr class="post-list__divider" />
     </li>
   

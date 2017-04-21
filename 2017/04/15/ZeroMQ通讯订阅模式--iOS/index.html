@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>ZeroMQ通讯订阅模式--iOS | 爬向天花板的蚂蚁</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="上善若水，水善则利万物">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="ZeroMQ通讯订阅模式--iOS | 爬向天花板的蚂蚁">
+    <meta name="twitter:description" content="上善若水，水善则利万物">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="ZeroMQ通讯订阅模式--iOS | 爬向天花板的蚂蚁">
+    <meta property="og:description" content="上善若水，水善则利万物">
+
+    
+    <meta name="author" content="JADE">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+
+    <link rel="canonical" href="http://yoursite.com/2017/04/15/ZeroMQ通讯订阅模式--iOS/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 爬向天花板的蚂蚁 的主页"><img src="/images/avatar.jpg" width="80" alt="爬向天花板的蚂蚁 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 爬向天花板的蚂蚁">爬向天花板的蚂蚁</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">上善若水，水善则利万物</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">人可以一无所有，但绝不能让人看不到任何希望</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="http://weibo.com/u/2809933401" title="我的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/Chenjiede" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-purple"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-04-15T07:43:36.000Z" class="post-list__meta--date date">2017-04-15</time> &#8226; <span class="post-meta__tags tags">于&nbsp; </span>
+      <span class="page-pv">
+      &nbsp;阅读&nbsp;<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">ZeroMQ通讯订阅模式--iOS</h1>
+  </header>
+
+  <section class="post">
+    <p>ZeroMQ在使用模式上支持多种，有req-reply，publish-subscribe。订阅模式是zmq的重头戏，以鄙人的使用和理解来浅谈下订阅模式，本人也是边学边用，如果有问题请大神指出。关于应答模式请点击这个 <strong><a href="https://chenjiede.github.io/2017/04/09/zeroMQ%E9%80%9A%E8%AE%AF%E5%BA%93--iOS/" target="_blank" rel="external">链接</a></strong> 。</p>
+<p>zmq的订阅模式实现示例代码如下</p>
+<pre><code>ZMQContext *ctx = [[ZMQContext alloc] initWithIOThreads:1U];
+// Socket to talk to server
+ZMQSocket *subscriber = [ctx socketWithType:ZMQ_SUB];
+if (![subscriber connectToEndpoint:@&quot;tcp://localhost:5556&quot;]) {
+    return EXIT_FAILURE;
+}
+
+const char *kNYCZipCode = &quot;10001&quot;;
+const char *filter = (argc &gt; 1)? argv[1] : kNYCZipCode;
+NSData *filterData = [NSData dataWithBytes:filter length:strlen(filter)];
+[subscriber setData:filterData forOption:ZMQ_SUBSCRIBE];
+
+(void)setvbuf(stdout, NULL, _IONBF, BUFSIZ);
+
+const int kMaxUpdate = 100;
+long total_temp = 0;
+for (int update_nbr = 0; update_nbr &lt; kMaxUpdate; ++update_nbr) {
+    NSData *msg = [subscriber receiveDataWithFlags:0];
+    const char *string = [msg bytes];
+
+    int zipcode = 0, temperature = 0, relhumidity = 0;
+    (void)sscanf(string, &quot;%d %d %d&quot;, &amp;zipcode, &amp;temperature, &amp;relhumidity);
+
+    printf(&quot;%d &quot;, temperature);
+    total_temp += temperature;
+}
+</code></pre><p>订阅模式的重点在于数据分发，数据由服务器主动推回来给客户端，订阅的数据统一接收，然后在分发到需要数据处理的对象中。示例代码只是简单的接收数据，它的做法是一个线程接收一个订阅消息，而且数据接收是阻塞当前线程的，这个在实际的项目应用也是不符合，所以封装和优化数据分发是必须的。</p>
+<pre><code>NSData *msg = [subscriber receiveDataWithFlags:0]; // 阻塞线程直到接收到数据
+</code></pre><p>数据的处理分发采用代理来回调，当然也可以使用block，个人建议使用代理，毕竟数据分发到不同的处理对象中，使用代理可以很好的避免循环引用，避免内存泄漏。我这里是使用一个两层Dictionary来存储代理，dictionary的遍历速度要比数组好一点。第一层dictionary以订阅码来做key，第二层dictionary以代理对象的hash值为key，这样可以快速找到代理对象进行分发，也可以准确找到某个代理对象并实现移除操作。</p>
+<p>添加代理对象的方法</p>
+<pre><code>- (void)setCode:(NSString *)code withDelegate:(id&lt;ZMQSubscriptionDelegate&gt;)delegate {
+    NSAssert(delegate != nil, @&quot;代理为空&quot;);
+    NSAssert(code != nil, @&quot;订阅码为空&quot;);
+
+    // 取出当前订阅码的代理字典
+    NSMutableDictionary *delegateDict = self.delegates[code];
+
+    if (delegateDict == nil) { // 不存在当前的订阅码代理对象
+        // 创建当前订阅码的代理对象的字典
+        delegateDict = [NSMutableDictionary dictionary];
+        self.delegates[code] = delegateDict;
+    }
+
+    // 添加代理对象
+    NSString *key = [NSString stringWithFormat:@&quot;%ld&quot;, (unsigned long)[delegate hash]];
+    delegateDict[key] = delegate;
+}
+</code></pre><p>移除代理对象的方法</p>
+<pre><code>- (void)removeDelegate:(NSString *)code withDelegate:(id&lt;ZMQSubscriptionDelegate&gt;)delegate {
+    NSAssert(delegate != nil, @&quot;代理为空&quot;);
+    NSAssert(code != nil, @&quot;订阅码为空&quot;);
+
+    // 取出当前订阅码的代理字典
+    NSMutableDictionary *delegateDict = self.delegates[code];
+
+    if (delegateDict == nil) return; // 不存在当前的订阅码代理对象
+
+    NSString *key = [NSString stringWithFormat:@&quot;%ld&quot;, (unsigned long)[delegate hash]];
+    [delegateDict removeObjectForKey:key];
+}
+</code></pre><p>zmq要订阅什么消息就发对应的订阅码，如果要全部订阅，就发一个空字符串，在子线程使用一个while循环来接收数据，定义一个标志位，让while循环可以控制，更改后的代码如下</p>
+<pre><code>_context = [[ZMQContext alloc] initWithIOThreads:1];
+_socket = [_context socketWithType:ZMQ_SUB];
+_socket.loadingtime = 3000; // 超时时间，单位毫秒
+
+NSString *endpoint = @&quot;tcp://:41204&quot;; // 服务器IP地址
+if (![_socket connectToEndpoint:endpoint]) {
+    NSLog(@&quot;订阅失败&quot;);
+    return;
+}
+
+NSData *filterData = [@&quot;&quot; dataUsingEncoding:NSUTF8StringEncoding];
+[_socket setData:filterData forOption:ZMQ_SUBSCRIBE];
+
+(void)setvbuf(stdout, NULL, _IONBF, BUFSIZ);
+
+closeSocket = NO;
+while (!closeSocket) {
+
+    @autoreleasepool {
+        NSData *recieveData = [_socket receiveDataWithFlags:0];
+        if (recieveData == nil)  continue; // 订阅消息超时返回nil
+
+        // 数据处理
+        NSString *dataStr = [[NSString alloc] initWithData:recieveData encoding:NSUTF8StringEncoding];
+        NSRange range = [dataStr rangeOfString:@&quot;{&quot; options:NSCaseInsensitiveSearch];
+        NSString *subStr = [dataStr substringFromIndex:range.location];
+        NSString *codeKey = [dataStr substringToIndex:range.location];
+
+        /*** 数据分发 ***/
+        // 取出当前订阅码的代理字典
+        NSMutableDictionary *delegateDict = self.delegates[codeKey];
+
+        if (delegateDict == nil) continue; // 没有对当前订阅码的代理对象
+
+        [delegateDict enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+
+            [self handleData:subStr delegate:obj code:codeKey];
+        }];
+    }    
+}
+</code></pre><p>zmq订阅返回的数据格式是订阅码拼接上推送的数据，当接收的数据为nil，那就是接收超时了，zmq订阅只要接收到数据，肯定不为空，必然有订阅码。这里的数据处理方式是因为我项目服务器返回的是订阅码拼接json的数据，要根据服务器定义的数据格式来处理数据。<strong>注意</strong>，这里是有一个坑，要在循环内使用<strong>@ autoreleasepool {}</strong>。一个对象只要出了作用的使用区域，就会自动释放了，可是当使用区域是一个while循环时，系统会认为你的对象还要使用就不会释放对象。所以，在循环里加上<strong>autoreleasepool</strong>标记，不管数据传递到哪个对象中使用，只有没有对象牵引着数据对象，就会释放了。</p>
+<p>我在使用zmq订阅模式的时候发现两个问题。zmq订阅模式有自动重新连接的机制，比如断网重连，服务器断开重连，但是超过一分钟好像就重连不了，我测试了很多次，可是安卓组的同事使用zmq订阅不会遇到重连不了的问题。因为重连不了，我要关闭订阅socket，重新开启订阅socket，发现一关闭socket就马上开启socket，zmq底层库要报错，然后程序直接崩溃了，所以我的启动订阅的方法要判断是否socket的关闭。</p>
+<pre><code>- (void)start {
+    if (closeSocket) {
+           [self performSelector:@selector(startConnect) withObject:nil afterDelay:1.0];
+        return;
+    }
+
+    [self startConnect];
+}
+</code></pre><p>zmq的订阅模式使用起来还是很稳定的，相对来说zmq的应答模式就容易出来问题，比如请求发送丢弃了。因为本人的项目使用zmq通讯库，后期还会继续研究。</p>
+<p>示例代码都放在 <a href="https://github.com/Chenjiede/zeromq-ios" target="_blank" rel="external">github</a> 。</p>
+<p><strong>参考</strong></p>
+<p>zeroMQ使用指导    <a href="http://zguide.zeromq.org/page:all" target="_blank" rel="external">http://zguide.zeromq.org/page:all</a></p>
+<p>zeroMQ的示例程序    <a href="https://github.com/imatix/zguide.git" target="_blank" rel="external">https://github.com/imatix/zguide.git</a></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/04/09/ZeroMQ通讯库--iOS/" title="ZeroMQ通讯库--iOS">ZeroMQ通讯库--iOS</a></h2>
+                <p class="excerpt">
+                
+                ZeroMQ是号称史上最好的通讯库，基于C语言开发的，实时流处理sorm的task之间的通信就是用的ZeroMQ。zeroMQ在使用模式上支持多种，有req-reply，publish-subscribe，pipe。我在项目中使用的是req-replay, publish-subscribe两种方式
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-04-08T16:24:02.000Z" class="post-list__meta--date date">2017-04-09</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/04/09/ZeroMQ通讯库--iOS/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2017 - 本站使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题,
+        由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+    </span>
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>
