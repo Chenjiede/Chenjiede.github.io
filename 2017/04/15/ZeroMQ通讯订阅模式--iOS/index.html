@@ -143,7 +143,7 @@
   </header>
 
   <section class="post">
-    <p>ZeroMQ在使用模式上支持多种，有req-reply，publish-subscribe。订阅模式是zmq的重头戏，以鄙人的使用和理解来浅谈下订阅模式，本人也是边学边用，如果有问题请大神指出。关于应答模式请点击这个 <strong><a href="https://chenjiede.github.io/2017/04/09/zeroMQ%E9%80%9A%E8%AE%AF%E5%BA%93--iOS/" target="_blank" rel="external">链接</a></strong> 。</p>
+    <p>ZeroMQ在使用模式上支持多种，有req-reply，publish-subscribe。订阅模式是zmq的重头戏，以鄙人的使用和理解来浅谈下订阅模式，本人也是边学边用，如有问题请大神指出。关于应答模式请阅读 <strong><a href="https://chenjiede.github.io/2017/04/09/zeroMQ%E9%80%9A%E8%AE%AF%E5%BA%93--iOS/" target="_blank" rel="external">这篇文章</a></strong> 。</p>
 <p>zmq的订阅模式实现示例代码如下</p>
 <pre><code>ZMQContext *ctx = [[ZMQContext alloc] initWithIOThreads:1U];
 // Socket to talk to server
@@ -205,7 +205,8 @@ for (int update_nbr = 0; update_nbr &lt; kMaxUpdate; ++update_nbr) {
     NSString *key = [NSString stringWithFormat:@&quot;%ld&quot;, (unsigned long)[delegate hash]];
     [delegateDict removeObjectForKey:key];
 }
-</code></pre><p>zmq要订阅什么消息就发对应的订阅码，如果要全部订阅，就发一个空字符串，在子线程使用一个while循环来接收数据，定义一个标志位，让while循环可以控制，更改后的代码如下</p>
+</code></pre><p><strong>注意</strong>，当对象不需要处理订阅消息时，一定要调用<strong> removeDelegate</strong>方法，因为代理对象是存储到字典中的，持有代理对象的强引用。</p>
+<p>zmq要订阅什么消息就发对应的订阅码，如果要全部订阅，就发一个空字符串，在子线程使用一个while循环来接收数据，定义一个标志位，让while循环可以控制，更改后的代码如下</p>
 <pre><code>_context = [[ZMQContext alloc] initWithIOThreads:1];
 _socket = [_context socketWithType:ZMQ_SUB];
 _socket.loadingtime = 3000; // 超时时间，单位毫秒
@@ -247,7 +248,7 @@ while (!closeSocket) {
     }    
 }
 </code></pre><p>zmq订阅返回的数据格式是订阅码拼接上推送的数据，当接收的数据为nil，那就是接收超时了，zmq订阅只要接收到数据，肯定不为空，必然有订阅码。这里的数据处理方式是因为我项目服务器返回的是订阅码拼接json的数据，要根据服务器定义的数据格式来处理数据。<strong>注意</strong>，这里是有一个坑，要在循环内使用<strong>@ autoreleasepool {}</strong>。一个对象只要出了作用的使用区域，就会自动释放了，可是当使用区域是一个while循环时，系统会认为你的对象还要使用就不会释放对象。所以，在循环里加上<strong>autoreleasepool</strong>标记，不管数据传递到哪个对象中使用，只有没有对象牵引着数据对象，就会释放了。</p>
-<p>我在使用zmq订阅模式的时候发现两个问题。zmq订阅模式有自动重新连接的机制，比如断网重连，服务器断开重连，但是超过一分钟好像就重连不了，我测试了很多次，可是安卓组的同事使用zmq订阅不会遇到重连不了的问题。因为重连不了，我要关闭订阅socket，重新开启订阅socket，发现一关闭socket就马上开启socket，zmq底层库要报错，然后程序直接崩溃了，所以我的启动订阅的方法要判断是否socket的关闭。</p>
+<p>我在使用zmq订阅模式的时候发现两个问题。zmq订阅模式有自动重新连接的机制，比如断网重连，服务器断开重连，但是超过一分钟好像就重连不了，我测试了很多次，可是安卓组的同事使用zmq订阅不会遇到重连不了的问题。因为重连不了，我要关闭订阅socket，重新开启订阅socket，发现一关闭socket就马上开启socket，zmq底层库就报错，然后程序直接崩溃了，所以我的启动订阅的方法要判断是否socket的关闭。</p>
 <pre><code>- (void)start {
     if (closeSocket) {
            [self performSelector:@selector(startConnect) withObject:nil afterDelay:1.0];
@@ -256,7 +257,7 @@ while (!closeSocket) {
 
     [self startConnect];
 }
-</code></pre><p>zmq的订阅模式使用起来还是很稳定的，相对来说zmq的应答模式就容易出来问题，比如请求发送丢弃了。因为本人的项目使用zmq通讯库，后期还会继续研究。</p>
+</code></pre><p>zmq的订阅模式使用起来还是很稳定的，相对来说zmq的应答模式会出现请求丢弃的问题。因为本人的项目使用zmq通讯库，后期还会继续研究。</p>
 <p>示例代码都放在 <a href="https://github.com/Chenjiede/zeromq-ios" target="_blank" rel="external">github</a> 。</p>
 <p><strong>参考</strong></p>
 <p>zeroMQ使用指导    <a href="http://zguide.zeromq.org/page:all" target="_blank" rel="external">http://zguide.zeromq.org/page:all</a></p>
