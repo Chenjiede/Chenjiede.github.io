@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    
+    <title>RunLoop初探，满足项目的基本应用 | 爬向天花板的蚂蚁</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta name="description" content="上善若水，水善则利万物">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="RunLoop初探，满足项目的基本应用 | 爬向天花板的蚂蚁">
+    <meta name="twitter:description" content="上善若水，水善则利万物">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="RunLoop初探，满足项目的基本应用 | 爬向天花板的蚂蚁">
+    <meta property="og:description" content="上善若水，水善则利万物">
+
+    
+    <meta name="author" content="JADE">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/avatar-small.png">
+    
+
+    <meta name="generator" content="hexo"/>
+    
+
+    <link rel="canonical" href="http://yoursite.com/2017/05/08/RunLoop初探/"/>
+
+                 
+</head>
+
+<body class="home-template no-js">
+    <script src="//cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/js/main.js"></script>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 爬向天花板的蚂蚁 的主页"><img src="/images/avatar.jpg" width="80" alt="爬向天花板的蚂蚁 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 爬向天花板的蚂蚁">爬向天花板的蚂蚁</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">上善若水，水善则利万物</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">人可以一无所有，但绝不能让人看不到任何希望</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">博客</a></li>
+            
+              <li class="navigation__item"><a href="/aboutme">关于我</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+  <li class="navigation__item">
+    <a href="http://weibo.com/u/2809933401" title="我的微博" target="_blank">
+      <i class='social fa fa-weibo'></i>
+      <span class="label">Weibo</span>
+    </a>
+  </li> 
+
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/Chenjiede" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+  
+<!-- Twitter -->
+
+  
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel-cover--overlay cover-purple"></div>
+  </div> 
+</header>
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
+
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-05-08T14:03:28.000Z" class="post-list__meta--date date">2017-05-08</time> &#8226; <span class="post-meta__tags tags">于&nbsp; </span>
+      <span class="page-pv">
+      &nbsp;阅读&nbsp;<span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span>
+      </span> 
+   
+    </div>
+    <h1 class="post-title">RunLoop初探，满足项目的基本应用</h1>
+  </header>
+
+  <section class="post">
+    <p>iOS开发肯定离不开多线程编程，而多线程又跟RunLoop有着密切的关系，这篇文章就来解剖下RunLoop。</p>
+<p>每个application运行都会开启一个主线程（UI线程），主线程默认是开启RunLoop的，让application可以随时接收用户的触摸事件实现交互，也可以处理复杂的业务逻辑，还可以休眠。</p>
+<p>当我们开启子线程执行任务时，子线程默认是不开启RunLoop的，等子线程的任务执行完，子线程就会被系统销毁回收。但有时候我们会频繁的开启线程去执行任务，开启线程又销毁线程，这也是有一定的性能代价的，所以我们可以让一个子线程成为常驻线程，有任务就执行，没任务就休眠，这样就降低频繁开启和销毁线程的性能浪费。</p>
+<p>让一个子线程成为常驻线程就必须开启子线程的RunLoop。开启RunLoop必须要有一个输入源或定时源，不然RunLoop开启就会马上关闭。输入源（<strong>input source</strong>）传递异步事件，通常事件来自其他的线程或程序。定时源（<strong>timer source</strong>）则传递同步事件，发生在特定时间或重复的时间间隔的事件。RunLoop的运行要指定其运行模式，无论是隐式或显式。</p>
+<p><strong>RunLoop模式</strong></p>
+<ul>
+<li><strong>kCFRunLoopDefaultMode:</strong> 默认模式，</li>
+<li><strong>UITrackingRunLoopMode:</strong> 界面追踪模式，一般用于scrollView滑动触摸追踪</li>
+<li><strong>UIInitializationRunLoopMode:</strong> 启动APP模式，启动完成后就不再使用</li>
+<li><strong>NSRunLoopCommonModes:</strong> 占位模式，包含多种模式：default，modal，tracking</li>
+</ul>
+<p>除了系统的模式，我们也可以使用自定义模式，<strong>NSRunLoopMode</strong>的字符串类型可以用于自定义。</p>
+<p>RunLoop模式的切换</p>
+<ul>
+<li>对于非主线程，我们可以退出当前模式，然后再进入另一个模式，也可以直接进入另一个模式，即嵌套</li>
+<li>对于主线程，我们当然也可以像上面一样操作，但是主线程有其特殊性，有很多系统的事件。系统会做一些切换，我们更关心的是系统是如何切换的？系统切换模式时，并没有使用嵌套</li>
+</ul>
+<p>简单开启子线程示例代码如下</p>
+<pre><code>- (void)startThread { @autoreleasepool {
+    NSThread *currentThread = [NSThread currentThread];
+    BOOL isCancelled = [currentThread isCancelled];
+    NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];
+
+    /**** 以时钟开启RunLoop ****/
+    [NSTimer scheduledTimerWithTimeInterval:[[NSDate distantFuture] timeIntervalSinceNow] repeats:YES block:^(NSTimer * _Nonnull timer) {
+       // 空任务
+    }];
+/*
+    [NSTimer scheduledTimerWithTimeInterval:5 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        // 空任务
+    }];
+*/
+    // 开启RunLoop
+    while (!isCancelled &amp;&amp; [currentRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
+        isCancelled = [currentThread isCancelled];
+        NSLog(@&quot;run ----------- run&quot;);
+    }
+}}
+</code></pre><p>RunLoop的开启有几种方法，<strong>run,</strong> <strong>runUntilDate:,</strong> <strong>runMode:beforeDate:</strong>。run方法启动要关闭RunLoop就比较麻烦了，其它两个方法都可以轻易关闭RunLoop。<br><strong>注意，</strong>以 <strong>输入源</strong> 唤醒线程做任务，做完任务就会退出RunLoop，如果是以<strong>runMode:beforeDate:</strong>启动的RunLoop就会直接退出，子线程执行完毕被回收，另外两个方法启动的RunLoop，会退出RunLoop然后又进入RunLoop。以 <strong>时钟源</strong> 唤醒线程做任务，无论是哪种方式启动RunLoop，都不会退出RunLoop。这里的示例代码为了方便控制RunLoop，使用<strong>runMode:beforeDate:</strong>启动，还加上线程的取消标志，让RunLoop退出又马上以<strong>runMode:beforeDate:</strong>启动，直到当线程取消，使while循环被打破。</p>
+<p>结束子线程的代码如下</p>
+<pre><code>- (void)stopRunLoop {
+    [_thread cancelled];
+
+    [self performSelector:@selector(stop) onThread:_thread withObject:nil waitUntilDone:NO];
+}
+
+/// 空任务唤醒线程
+- (void)stop {}
+</code></pre><p>空任务是为了唤醒线程，使子线程走到while循环，然后退出while循环。</p>
+<p><strong>RunLoop的观察者</strong></p>
+<p>RunLoop除了处理输入源和定时源的事件，也会生成RunLoop行为的通知。可以用<strong>Core Foundation</strong>框架注册观察者，实现对RunLoop行为的观察。使用观察者可以很清晰地知道RunLoop的行为，方便调试和实现功能。注册观察者使用C语言代码，如下</p>
+<pre><code>-(void)addRunloopObserver{
+        //获取当前的RunLoop
+        CFRunLoopRef runloop = CFRunLoopGetCurrent();
+    //定义一个centext
+    CFRunLoopObserverContext context = {
+        0,
+        ( __bridge void *)(self),
+        &amp;CFRetain,
+        &amp;CFRelease,
+        NULL
+    };
+    //定义一个观察者
+    static CFRunLoopObserverRef defaultModeObsever;
+    //创建观察者
+    defaultModeObsever = CFRunLoopObserverCreate(NULL,
+                                             kCFRunLoopAllActivities,
+                                             YES,
+                                             NSIntegerMax - 999,
+                                             &amp;ObserverCallback,
+                                             &amp;context
+                                             );
+    //添加当前RunLoop的观察者
+    CFRunLoopAddObserver(runloop, defaultModeObsever, kCFRunLoopDefaultMode);
+    //c语言有creat 就需要release
+    CFRelease(defaultModeObsever);
+}
+
+/// 定义一个回调函数  RunLoop行为监听
+static void ObserverCallback(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info){
+}
+</code></pre><p>其中的参数都是比较简单的，不在这里一一细说了^_^。</p>
+<p><strong>自定义输入源</strong></p>
+<p>自定义输入源就比较复杂了，自己定义两个文件<strong>RunLoopSource</strong>和<strong>RunLoopContext</strong>，实现相关的功能。RunLoopSource需要实现的方法</p>
+<pre><code>/// 添加输入源到当前RunLoop
+- (void)addToCurrentRunLoop;
+/// 移除输入源
+- (void)invalidate;
+/// 当输入源唤醒RunLoop执行的任务
+- (void)sourceFired;
+- (void)fireAllCommandsOnRunLoop:(CFRunLoopRef)runloop;
+/// 唤醒RunLoop
+- (void)fireAllCommands;
+</code></pre><p>在    RunLoopSource 实现文件创建输入源并初始化。</p>
+<pre><code>- (instancetype)init {
+    if (self = [super init]) {
+
+        CFRunLoopSourceContext context = {0, (__bridge void *)(self), NULL, NULL, NULL, NULL,
+                                    NULL, &amp;RunLoopSourceScheduleRoutine, RunLoopSourceCancleRoutine, RunLoopSourcePerformRooutine };
+
+        // 初始化输入源
+        runLoopSource = CFRunLoopSourceCreate(NULL, 0, &amp;context);
+           commands = [[NSMutableArray alloc] init];
+    }
+
+    return self;
+}
+</code></pre><p><strong>RunLoopSourceScheduleRoutine</strong>是将输入源添加到runloop的回调方法，定义如下</p>
+<pre><code>void RunLoopSourceScheduleRoutine(void *info, CFRunLoopRef rl, CFStringRef mode) {
+}
+</code></pre><p><strong>RunLoopSourcePerformRooutine</strong>是输入源被告知时用来处理自定义数据的回调方法，定义如下</p>
+<pre><code>void RunLoopSourcePerformRooutine(void *info) {
+}
+</code></pre><p><strong>RunLoopSourceCancleRoutine</strong>是将输入源从runloop移除的回调方法，定义如下</p>
+<pre><code>void RunLoopSourceCancleRoutine(void *info, CFRunLoopRef rl, CFStringRef mode) {
+}
+</code></pre><hr>
+<p>实现后相关的方法后，可以在子线程把RunLoopSource添加进去，这里使用run方法启动RunLoop</p>
+<pre><code>/// 添加输入源到runloop
+- (void)addToCurrentRunLoop {
+    CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+    CFRunLoopAddSource(runLoop, runLoopSource, kCFRunLoopDefaultMode);
+    _runLoop = runLoop;
+    CFRunLoopRun();
+}
+</code></pre><p>显式唤醒runloop，当客户端准备好处理加入缓冲区的命令后会调用此方法</p>
+<pre><code>- (void)fireAllCommands {
+    CFRunLoopSourceSignal(runLoopSource);
+    CFRunLoopWakeUp(_runLoop);
+}
+</code></pre><p>子线程被唤醒执行的任务</p>
+<pre><code>- (void)sourceFired {
+    NSLog(@&quot;sourceFired -- %@&quot;, [NSThread currentThread]);
+}
+</code></pre><p>结束RunLoop，以退出子线程，注意，这个方法一定要在子线程里面调用</p>
+<pre><code>- (void)stopRunLoop {
+    CFRunLoopRef runLoop = CFRunLoopGetCurrent();
+       CFRunLoopStop(runLoop);
+}
+</code></pre><hr>
+<p><strong>迷之总结</strong></p>
+<p>使用这种自定义输入源，可以在任何时候唤醒子线程执行任务，而且RunLoop不会在执行完任务后就退出然后又进入（要用run方法启动）。当然，这个执行任务是固定的，跟时钟源以重复间隔开启RunLoop的效果很像，不过这种自定义输入源可以随便在任何时刻唤醒线程执行任务，而时钟要以一定的时间间隔。</p>
+<p>用run方法启动RunLoop，就要用<strong>CFRunLoopStop</strong>结束RunLoop，不过苹果官方文档不推荐使用<strong>CFRunLoopStop</strong>来结束RunLoop。在我的示例代码，虽然可以结束到RunLoop，但不是马上结束的，有一定的延时，由系统来决定结束的时间，通过观察者就可以很好地观察到其行为。</p>
+<p>经过测试，先移除RunLoop的输入源，在唤醒线程，然后线程不执行任务就直接退出RunLoop，退出线程。</p>
+<p><strong>示例代码已经上传到 <a href="https://github.com/Chenjiede/RunLoopTest" target="_blank" rel="external">GitHub</a></strong></p>
+
+  </section>
+
+</article>
+
+<section class="read-more">
+           
+    
+        
+        
+               
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/2017/04/15/ZeroMQ通讯订阅模式--iOS/" title="ZeroMQ通讯订阅模式--iOS">ZeroMQ通讯订阅模式--iOS</a></h2>
+                <p class="excerpt">
+                
+                ZeroMQ在使用模式上支持多种，有req-reply，publish-subscribe。订阅模式是zmq的重头戏，以鄙人的使用和理解来浅谈下订阅模式，本人也是边学边用，如有问题请大神指出。关于应答模式请阅读 这篇文章 。
+zmq的订阅模式实现示例代码如下
+ZMQContext *ctx = [[
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-04-15T07:43:36.000Z" class="post-list__meta--date date">2017-04-15</time> &#8226; <span class="post-list__meta--tags tags">于&nbsp;</span><a class="btn-border-small" href="/2017/04/15/ZeroMQ通讯订阅模式--iOS/">继续阅读</a></div>
+                       
+            </div>
+        
+     
+   
+   
+  
+</section>
+
+  
+
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用 <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2017 - 本站使用 <a href="https://github.com/monniya/hexo-theme-new-vno ">new-vno</a> 主题,
+        由<a href="https://monniya.com ">@Monniya</a> 修改自 <a href="https://github.com/lenbo-ma/hexo-theme-vno" target="_blank">Vno</a>, 原创出自<a href="http://github.com/onevcat/vno" target="_blank">onevcat</a>
+    </span>
+    
+</footer>
+
+
+        </div>
+    </div>
+
+     
+    
+
+
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    
+</body>
+</html>
